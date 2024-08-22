@@ -23,11 +23,6 @@ export default function Jugar() {
     }
   }, [paises]);
 
- 
-  // useEffect(() => {
-  //   if(paisRandom.name === respuesta)
-  //     setRonda(ronda+1)
-  // }, []);
 
   function mostrarPais(){
     const randomIndex = Math.floor(Math.random() * paises.length);
