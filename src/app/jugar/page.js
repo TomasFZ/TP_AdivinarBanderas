@@ -6,6 +6,7 @@ export default function Jugar() {
   const [paises, setPaises] = useState([]);
   const [paisRandom, setPaisRandom] = useState([])
   const [ronda, setRonda] = useState(1);
+  const [puntos, setPuntos] = useState(0);
   const [respuesta, setRespuesta] = useState("")
   useEffect(() => {
     fetch('https://countriesnow.space/api/v0.1/countries/flag/images')
@@ -17,16 +18,16 @@ export default function Jugar() {
   }, []);
 
   useEffect(() => {
-    if (paises.length > 0) {
+    if (paises.length > 0 ) {
       mostrarPais();
     }
   }, [paises]);
 
  
-  useEffect(() => {
-    if(paisRandom.name === respuesta)
-      setRonda(ronda+1)
-  }, []);
+  // useEffect(() => {
+  //   if(paisRandom.name === respuesta)
+  //     setRonda(ronda+1)
+  // }, []);
 
   function mostrarPais(){
     const randomIndex = Math.floor(Math.random() * paises.length);
@@ -37,12 +38,28 @@ export default function Jugar() {
     setRespuesta(e.target.value)
   }
 
+  function handleSubmit(e){
+    e.preventDefault()
+      if(paisRandom.name === respuesta){
+        setRonda(ronda+1)
+        setRespuesta("")
+        mostrarPais();
+        setPuntos(puntos+10)
+      }else{
+        setPuntos(puntos-1)
+      }
+  }
+
   return (
     <div>
       <h2>¿Cuál es este país?</h2>
           <img src={paisRandom.flag} alt="fotoPais" />
-          <input type="text" id={`nombre-${paisRandom.name}`} value={respuesta} name="nombre" onChange={handleInputRespuesta} />
+          <form onSubmit={handleSubmit}>
+            <input type="text" id={`nombre-${paisRandom.name}`} value={respuesta} name="nombre" onChange={handleInputRespuesta} />
+            <button type="submit">Enviar</button>
+          </form>
           <p>ronda: {ronda}</p>
+          <p>Puntos: {puntos}</p>
     </div>
   );
 }
